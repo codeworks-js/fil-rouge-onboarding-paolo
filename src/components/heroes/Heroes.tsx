@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./heroes.css";
+import HeroDetail from "./HeroDetail";
 
 export interface Hero {
     id: number;
@@ -21,17 +22,6 @@ export const HEROES: Hero[] = [
 function Heroes() {
     const [selectedHero, setSelectedHero] = useState<Hero | null>(null);
 
-    const updateHeroName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        if (!selectedHero) {
-            return;
-        }
-
-        setSelectedHero({
-            id: selectedHero.id,
-            name: event.target.value
-        });
-    }
-
     return (
         <>
             <h2>My Heroes</h2>
@@ -41,9 +31,6 @@ function Heroes() {
                         const classname = selectedHero?.id === hero.id
                             ? "selected"
                             : "";
-                        if (classname) {
-                            console.log(hero.name);
-                        }
 
                         return (
                             <li key={hero.id}>
@@ -61,25 +48,7 @@ function Heroes() {
                 }
             </ul>
 
-            {
-                selectedHero && (
-                    <>
-                        <h2>{selectedHero.name.toUpperCase()} Details</h2>
-                        <div><span>id: </span>{selectedHero.id}</div>
-                        <div>
-                            <label htmlFor="name">Hero name: </label>
-                            <input 
-                                id="name" 
-                                type="text"
-                                value={selectedHero.name} 
-                                placeholder="name"
-                                onChange={updateHeroName}
-                                />
-                        </div>
-                    </>
-                )
-            }
-
+            <HeroDetail hero={selectedHero} updateHero={setSelectedHero}/>
         </>
     )
 }
