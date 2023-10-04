@@ -13,8 +13,11 @@ function Heroes({ heroService }: HeroesProps) {
     const [selectedHero, setSelectedHero] = useState<Hero | null>(null);
 
     useEffect(() => {
-        const heroList = heroService.getHeroes();
-        setHeroes(heroList);
+        const fetchHeroes = async () => {
+            const heroList = await heroService.getHeroes();
+            setHeroes(heroList);
+        }
+        fetchHeroes();
     }, []);
 
     return (
