@@ -7,6 +7,11 @@ function useHeroes() {
     const [heroes, setHeroes] = useState<Hero[]>([]);
     const { add: addMessage } = useContext(MessagesContext);
 
+    const getHero = async (id: number): Promise<Hero> => {
+        addMessage(`HeroService: fetched hero id=${id}`);
+        return HEROES.find((hero) => hero.id === id)!;
+    } 
+
     useEffect(() => {
         const fetchHeroes = async () => {
             const heroList = await getHeroes();
@@ -16,7 +21,7 @@ function useHeroes() {
         fetchHeroes();
     }, []);
 
-    return { heroes };
+    return { heroes, getHero };
 }
 
 async function getHeroes(): Promise<Hero[]> {

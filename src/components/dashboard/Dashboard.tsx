@@ -1,4 +1,5 @@
 import useHeroes from "../../hooks/useHeroes";
+import { Link } from "react-router-dom";
 import "./dashboard.css";
 
 function Dashboard() {
@@ -9,7 +10,7 @@ function Dashboard() {
             <h2>Top Heroes</h2>
             <div className="heroes-menu">
                 {
-                    heroes.slice(1, 5).map((hero) => <a key={crypto.randomUUID()}>{hero.name}</a>)
+                    heroes.slice(1, 5).map((hero) => <Link key={crypto.randomUUID()} to={`/detail/${hero.id}`}>{hero.name}</Link>)
                 }
             </div>
         </>
