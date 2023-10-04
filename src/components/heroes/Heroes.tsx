@@ -1,18 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./heroes.css";
 import HeroDetail from "./HeroDetail";
-import { HEROES } from "../../mocks/heroes-data";
 import { Hero } from "../../types/Hero";
+import { HeroService } from "../../services/HeroService";
 
-function Heroes() {
+interface HeroesProps {
+    heroService: HeroService;
+}
+
+function Heroes({ heroService }: HeroesProps) {
+    const [heroes, setHeroes] = useState<Hero[]>([]);
     const [selectedHero, setSelectedHero] = useState<Hero | null>(null);
+
+    useEffect(() => {
+        const heroList = heroService.getHeroes();
+        setHeroes(heroList);
+    }, []);
 
     return (
         <>
             <h2>My Heroes</h2>
             <ul className="heroes">
                 {
-                    HEROES.map((hero) => {
+                    heroes.map((hero) => {
                         const classname = selectedHero?.id === hero.id
                             ? "selected"
                             : "";
