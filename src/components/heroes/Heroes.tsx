@@ -14,8 +14,9 @@ function Heroes() {
                     heroes.map((hero) => {
                         return (
                             <li key={hero.id}>
-                                <Link to="/detail/{{hero.id}}">
-                                    <span className="badge">{hero.id}</span> {hero.name}
+                                <Link to={`/detail/${hero.id}`}>
+                                    <span className="badge">{hero.id}</span> 
+                                    <span className="name">{hero.name}</span>
                                 </Link>
                             </li>
                         )
