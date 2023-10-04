@@ -1,4 +1,4 @@
-import { Hero } from "./Heroes"
+import { Hero } from "../../types/Hero";
 
 interface HeroDetailProps {
     hero: Hero | null;
