@@ -6,10 +6,12 @@ import "./heroes-detail.css";
 
 function HeroDetail() {
     const { id } = useParams();
-    const { getHero } = useHeroes();
+    const { getHero, updateHero } = useHeroes();
     const [currentHero, setCurrentHero] = useState<Hero | null>(null);
     const navigate = useNavigate();
     
+    const goBack = () => navigate(-1);
+
     const updateHeroName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         if (!currentHero) {
             return;
@@ -20,7 +22,15 @@ function HeroDetail() {
             name: event.target.value
         });
     }
-    const goBack = () => navigate(-1);
+
+    const saveHero = async () => {
+        if (currentHero === null) {
+            return;
+        }
+
+        await updateHero(currentHero);
+        goBack();
+    }
 
     useEffect(() => {
         const heroId = Number(String(id)) || 12;
@@ -51,6 +61,7 @@ function HeroDetail() {
                     />
             </div>
             <button type="button" onClick={(_) => goBack()}>go back</button>
+            <button type="button" onClick={(_) => saveHero()}>Save</button>
         </>
     )
 }

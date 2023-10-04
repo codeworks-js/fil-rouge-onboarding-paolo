@@ -1,6 +1,6 @@
 import { Hero } from "../types/Hero";
 
-export const HEROES: Hero[] = [
+const allHeroes: Hero[] = [
     { id: 12, name: 'Dr. Nice' },
     { id: 13, name: 'Bombasto' },
     { id: 14, name: 'Celeritas' },
@@ -11,3 +11,7 @@ export const HEROES: Hero[] = [
     { id: 19, name: 'Magma' },
     { id: 20, name: 'Tornado' }
 ];
+
+export const HEROES = new Map<number, Hero>(
+    allHeroes.map(hero => [hero.id, hero])
+)

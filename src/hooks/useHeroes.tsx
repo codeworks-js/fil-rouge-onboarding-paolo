@@ -17,6 +17,12 @@ function useHeroes() {
         });
     } 
 
+    const updateHero = async (hero: Hero): Promise<void> => {
+        await modifyHero(hero).catch((err) => {
+            addMessage(err.message);
+        })
+    }
+
     useEffect(() => {
         const fetchHeroes = async () => {
             const heroList = await getHeroes();
@@ -27,7 +33,7 @@ function useHeroes() {
             .catch((err) => addMessage(err.message));
     }, []);
 
-    return { heroes, getHero };
+    return { heroes, getHero, updateHero };
 }
 
 async function getHeroes(): Promise<Hero[]> {
@@ -44,6 +50,19 @@ async function getHeroById(id: number): Promise<Hero> {
         throw new Error("Could not get hero details.");
     }
     return data.json();
+}
+
+async function modifyHero(hero: Hero): Promise<void> {
+    const data = await fetch(
+        "/api/heroes", 
+        { 
+            method: "PUT",
+            body: JSON.stringify(hero)
+        }
+    );
+    if (data.status !== 200) {
+        throw new Error("Could not get hero details.");
+    }
 }
 
 export default useHeroes;
