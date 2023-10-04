@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./heroes.css";
 import HeroDetail from "./HeroDetail";
 import { Hero } from "../../types/Hero";
 import { HeroService } from "../../services/HeroService";
+import { MessagesContext } from "../../contexts/MessagesContext";
 
 interface HeroesProps {
     heroService: HeroService;
@@ -12,6 +13,8 @@ function Heroes({ heroService }: HeroesProps) {
     const [heroes, setHeroes] = useState<Hero[]>([]);
     const [selectedHero, setSelectedHero] = useState<Hero | null>(null);
 
+    const { add: addMessage } = useContext(MessagesContext);
+
     useEffect(() => {
         const fetchHeroes = async () => {
             const heroList = await heroService.getHeroes();
@@ -19,6 +22,11 @@ function Heroes({ heroService }: HeroesProps) {
         }
         fetchHeroes();
     }, []);
+
+    const selectHero = (hero: Hero) => {
+        addMessage(`HeroesComponent: Selected hero id=${hero.id}`);
+        setSelectedHero(hero);
+    }
 
     return (
         <>
@@ -35,7 +43,7 @@ function Heroes({ heroService }: HeroesProps) {
                                 <button 
                                     type="button" 
                                     className={classname}
-                                    onClick={(_) => setSelectedHero(hero)}
+                                    onClick={(_) => selectHero(hero)}
                                     >
                                     <span className="badge">{hero.id}</span>
                                     <span className="name">{hero.name}</span>
