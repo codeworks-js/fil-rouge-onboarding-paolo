@@ -12,7 +12,10 @@ export const handlers = [
         };
         HEROES.set(newHero.id, newHero);
 
-        return res(ctx.status(201));
+        return res(
+            ctx.status(201),
+            ctx.json(newHero)
+        );
     }),
 
     rest.get("/api/heroes/:id", (req, res, ctx) => {
@@ -33,6 +36,12 @@ export const handlers = [
         const hero = await req.json<Hero>();
         HEROES.set(hero.id, hero);
         return res(ctx.status(200));
+    }),
+
+    rest.delete("/api/heroes/:id", (req, res, ctx) => {
+        const heroId = Number(String(req.params.id));
+        HEROES.delete(heroId);
+        return res(ctx.status(204));
     })
 ]
 

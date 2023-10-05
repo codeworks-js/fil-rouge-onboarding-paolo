@@ -5,7 +5,7 @@ import { useState } from "react";
 
 
 function Heroes() {
-    const { heroes, addHero } = useHeroes();
+    const { heroes, addHero, removeHero } = useHeroes();
     const [newHeroName, setNewHeroName] = useState<string>("");
 
     const updateNewHeroName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -14,10 +14,6 @@ function Heroes() {
             return;
         }
         setNewHeroName(newName);
-    }
-
-    const submitNewHero = async () => {
-        await addHero(newHeroName);
     }
 
     return (
@@ -29,7 +25,7 @@ function Heroes() {
                 <button
                     type="button"
                     className="add-button"
-                    onClick={submitNewHero}
+                    onClick={(_) => addHero(newHeroName)}
                     >
                     Add hero
                 </button>
@@ -43,6 +39,14 @@ function Heroes() {
                                     <span className="badge">{hero.id}</span> 
                                     <span className="name">{hero.name}</span>
                                 </Link>
+                                <button 
+                                    type="button" 
+                                    className="delete" 
+                                    title="delete hero"
+                                    onClick={(_) => removeHero(hero.id)}
+                                    >
+                                    x
+                                </button>
                             </li>
                         )
                     })

@@ -18,17 +18,25 @@ function useHeroes() {
     } 
 
     const updateHero = async (hero: Hero): Promise<void> => {
-        await modifyHero(hero).catch((err) => {
-            addMessage(err.message);
-        });
+        await modifyHero(hero).catch((err) => addMessage(err.message));
     }
 
     const addHero = async (name: string): Promise<void> => {
         await createHero(name)
-            .then(() => addMessage(`Hero '${name}' created, refresh list.`))
-            .catch((err) => {
-                addMessage(err.message);
-            });
+            .then((newHero) => {
+                setHeroes([...heroes, newHero])
+                addMessage(`Hero '${name}' created.`);
+            })
+            .catch((err) => addMessage(err.message));
+    }
+
+    const removeHero = async (id: number): Promise<void> => {
+        await deleteHero(id)
+            .then(() => {
+                setHeroes(heroes.filter((hero) => hero.id !== id))
+                addMessage(`Hero w/ id '${id}' removed.`);
+            })
+            .catch((err) => addMessage(err.message));
     }
 
     useEffect(() => {
@@ -41,7 +49,7 @@ function useHeroes() {
             .catch((err) => addMessage(err.message));
     }, []);
 
-    return { heroes, getHero, updateHero, addHero };
+    return { heroes, getHero, updateHero, addHero, removeHero };
 }
 
 async function getHeroes(): Promise<Hero[]> {
@@ -73,7 +81,7 @@ async function modifyHero(hero: Hero): Promise<void> {
     }
 }
 
-async function createHero(name: string): Promise<void> {
+async function createHero(name: string): Promise<Hero> {
     const data = await fetch(
         "/api/heroes",
         {
@@ -83,6 +91,17 @@ async function createHero(name: string): Promise<void> {
     );
     if (data.status !== 201) {
         throw new Error("Could not create hero.");
+    }
+    return await data.json();
+}
+
+async function deleteHero(id: number): Promise<void> {
+    const data = await fetch(
+        `/api/heroes/${id}`,
+        { method: "DELETE" }
+    );
+    if (data.status !== 204) {
+        throw new Error("Could not remove hero.");
     }
 }
 
