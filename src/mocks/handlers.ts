@@ -3,6 +3,18 @@ import { HEROES } from "./heroes-data";
 import { Hero } from "../types/Hero";
 
 export const handlers = [
+    rest.post("/api/heroes", async (req, res, ctx) => {
+        const { name } = await req.json();
+
+        const newHero: Hero = {
+            id: generateId(),
+            name
+        };
+        HEROES.set(newHero.id, newHero);
+
+        return res(ctx.status(201));
+    }),
+
     rest.get("/api/heroes/:id", (req, res, ctx) => {
         const heroId = Number(String(req.params.id));
         const hero = HEROES.get(heroId);
@@ -23,3 +35,9 @@ export const handlers = [
         return res(ctx.status(200));
     })
 ]
+
+function generateId(): number {
+    return HEROES.size > 0
+        ? Math.max(...HEROES.keys()) + 1
+        : 11;
+}

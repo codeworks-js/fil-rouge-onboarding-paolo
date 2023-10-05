@@ -20,7 +20,15 @@ function useHeroes() {
     const updateHero = async (hero: Hero): Promise<void> => {
         await modifyHero(hero).catch((err) => {
             addMessage(err.message);
-        })
+        });
+    }
+
+    const addHero = async (name: string): Promise<void> => {
+        await createHero(name)
+            .then(() => addMessage(`Hero '${name}' created, refresh list.`))
+            .catch((err) => {
+                addMessage(err.message);
+            });
     }
 
     useEffect(() => {
@@ -33,7 +41,7 @@ function useHeroes() {
             .catch((err) => addMessage(err.message));
     }, []);
 
-    return { heroes, getHero, updateHero };
+    return { heroes, getHero, updateHero, addHero };
 }
 
 async function getHeroes(): Promise<Hero[]> {
@@ -62,6 +70,19 @@ async function modifyHero(hero: Hero): Promise<void> {
     );
     if (data.status !== 200) {
         throw new Error("Could not get hero details.");
+    }
+}
+
+async function createHero(name: string): Promise<void> {
+    const data = await fetch(
+        "/api/heroes",
+        {
+            method: "POST",
+            body: JSON.stringify({ name })
+        }
+    );
+    if (data.status !== 201) {
+        throw new Error("Could not create hero.");
     }
 }
 

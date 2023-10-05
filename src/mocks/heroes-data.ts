@@ -14,4 +14,4 @@ const allHeroes: Hero[] = [
 
 export const HEROES = new Map<number, Hero>(
     allHeroes.map(hero => [hero.id, hero])
-)
+);
