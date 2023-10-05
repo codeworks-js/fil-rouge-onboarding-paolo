@@ -47,7 +47,11 @@ function useHeroesService(): IHeroesService {
     const updateHero = async (hero: Hero): Promise<void> => {
         setIsLoading(true);
 
-        await fetcher.put({ url: new URL(`api/heroes/${hero.id}`, import.meta.env.VITE_API_URL) })
+        await fetcher.put(
+            { 
+                url: new URL(`api/heroes`, import.meta.env.VITE_API_URL),
+                body: hero
+            })
             .catch((_) => addMessage("Could not modify hero details."))
             .finally(() =>  setIsLoading(false));
     }
