@@ -7,12 +7,7 @@ interface IMessageService {
     clear(): void;
 }
 
-export const MessagesContext = createContext<IMessageService>({
-    messages: [],
-    add: (_) => {},
-    isEmpty: () => true,
-    clear: () => {}
-});
+export const MessagesContext = createContext<IMessageService>(null as unknown as IMessageService);
 
 function MessagesProvider({ children }: { children: ReactNode }) {
     const [messages, setMessages] = useState<string[]>([]);

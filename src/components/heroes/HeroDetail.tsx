@@ -1,12 +1,12 @@
 import { Hero } from "../../types/Hero";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useHeroes from "../../hooks/useHeroes";
+import useHeroesService from "../../hooks/useHeroes";
 import "./heroes-detail.css";
 
 function HeroDetail() {
     const { id } = useParams();
-    const { getHero, updateHero } = useHeroes();
+    const { getHero, updateHero } = useHeroesService();
     const [currentHero, setCurrentHero] = useState<Hero | null>(null);
     const navigate = useNavigate();
     

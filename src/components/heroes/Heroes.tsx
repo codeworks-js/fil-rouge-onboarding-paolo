@@ -1,11 +1,13 @@
-import useHeroes from "../../hooks/useHeroes";
+import useHeroesService from "../../hooks/useHeroes";
 import { Link } from "react-router-dom";
 import "./heroes.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Hero } from "../../types/Hero";
 
 
 function Heroes() {
-    const { heroes, addHero, removeHero } = useHeroes();
+    const { getHeroes, addHero, removeHero } = useHeroesService();
+    const [heroes, setHeroes] = useState<Hero[]>([]);
     const [newHeroName, setNewHeroName] = useState<string>("");
 
     const updateNewHeroName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -16,6 +18,27 @@ function Heroes() {
         setNewHeroName(newName);
     }
 
+    const submitNewHero = async (name: string): Promise<void> => {
+        const newHero = await addHero(name);
+        if (newHero.id === -1) {
+            return;
+        }
+        setHeroes([...heroes, newHero]);
+    }
+
+    const submitHeroRemoval = async (id: number): Promise<void> => {
+        await removeHero(id);
+        setHeroes(heroes.filter((hero) => hero.id !== id));
+    }
+
+    useEffect(() => {
+        const fetchHeroes = async () => {
+            const heroes = await getHeroes();
+            setHeroes(heroes);
+        }
+        fetchHeroes();
+    }, []);
+
     return (
         <>
             <h2>My Heroes</h2>
@@ -25,7 +48,7 @@ function Heroes() {
                 <button
                     type="button"
                     className="add-button"
-                    onClick={(_) => addHero(newHeroName)}
+                    onClick={(_) => submitNewHero(newHeroName)}
                     >
                     Add hero
                 </button>
@@ -43,7 +66,7 @@ function Heroes() {
                                     type="button" 
                                     className="delete" 
                                     title="delete hero"
-                                    onClick={(_) => removeHero(hero.id)}
+                                    onClick={(_) => submitHeroRemoval(hero.id)}
                                     >
                                     x
                                 </button>

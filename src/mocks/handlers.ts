@@ -18,6 +18,23 @@ export const handlers = [
         );
     }),
 
+    rest.get("/api/heroes/search", async (req, res, ctx) => {
+        const term = req.url.searchParams.get("term") || "";
+        if (term === "") {
+            return res(
+                ctx.status(200),
+                ctx.json([])
+            );
+        }
+
+        const matches = Array.from(HEROES.values())
+            .filter((hero) => hero.name.toLowerCase().includes(term));
+        return res(
+            ctx.status(200),
+            ctx.json(matches)
+        );
+    }),
+
     rest.get("/api/heroes/:id", (req, res, ctx) => {
         const heroId = Number(String(req.params.id));
         const hero = HEROES.get(heroId);

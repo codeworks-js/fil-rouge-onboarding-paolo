@@ -1,58 +1,109 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Hero } from "../types/Hero";
 import { MessagesContext } from "../contexts/MessagesContext";
 
-function useHeroes() {
-    const [heroes, setHeroes] = useState<Hero[]>([]);
+interface IHeroesService {
+    isLoading: () => boolean;
+    addHero(name: string): Promise<Hero>;
+    getHero(id: number): Promise<Hero>;
+    getHeroes(): Promise<Hero[]>;
+    removeHero(id: number): Promise<void>;
+    searchHeroes(term: string): Promise<Hero[]>;
+    updateHero(hero: Hero): Promise<void>;
+}
+
+function useHeroesService(): IHeroesService {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { add: addMessage } = useContext(MessagesContext);
 
+    const getHeroes = async (): Promise<Hero[]> => {
+        setIsLoading(true);
+        addMessage("HeroService: fetched heroes");
+
+        return listHeroes()
+            .catch((err) => {
+                addMessage(err.message);
+                return [];
+            })
+            .finally(() =>  setIsLoading(false));
+    }
+
     const getHero = async (id: number): Promise<Hero> => {
+        setIsLoading(true);
         addMessage(`HeroService: fetched hero id=${id}`);
-        return await getHeroById(id).catch((err) => {
-            addMessage(err.message);
-            return {
-                id: 0,
-                name: ''
-            };
-        });
+
+        return getHeroById(id)
+            .catch((err) => {
+                addMessage(err.message);
+                return {
+                    id: 0,
+                    name: ''
+                };
+            })
+            .finally(() =>  setIsLoading(false));;
     } 
 
     const updateHero = async (hero: Hero): Promise<void> => {
-        await modifyHero(hero).catch((err) => addMessage(err.message));
+        setIsLoading(true);
+
+        await modifyHero(hero)
+            .catch((err) => addMessage(err.message))
+            .finally(() =>  setIsLoading(false));
     }
 
-    const addHero = async (name: string): Promise<void> => {
-        await createHero(name)
-            .then((newHero) => {
-                setHeroes([...heroes, newHero])
+    const addHero = async (name: string): Promise<Hero> => {
+        setIsLoading(true);
+
+        return createHero(name)
+            .then((hero) => {
                 addMessage(`Hero '${name}' created.`);
+                return hero;
             })
-            .catch((err) => addMessage(err.message));
+            .catch((err) => {
+                addMessage(err.message);
+                return {
+                    id: 0,
+                    name: ''
+                };
+            })
+            .finally(() =>  setIsLoading(false));
     }
 
     const removeHero = async (id: number): Promise<void> => {
+        setIsLoading(true);
+
         await deleteHero(id)
-            .then(() => {
-                setHeroes(heroes.filter((hero) => hero.id !== id))
-                addMessage(`Hero w/ id '${id}' removed.`);
-            })
-            .catch((err) => addMessage(err.message));
+            .then(() => addMessage(`Hero w/ id '${id}' removed.`))
+            .catch((err) => addMessage(err.message))
+            .finally(() =>  setIsLoading(false));
     }
 
-    useEffect(() => {
-        const fetchHeroes = async () => {
-            const heroList = await getHeroes();
-            setHeroes(heroList);
-        }
-        addMessage("HeroService: fetched heroes");
-        fetchHeroes()
-            .catch((err) => addMessage(err.message));
-    }, []);
+    const searchHeroes = async (term: string): Promise<Hero[]> => {
+        setIsLoading(true);
 
-    return { heroes, getHero, updateHero, addHero, removeHero };
+        const matchedHeroes = await findHeroesByTerm(term)
+            .catch((err) => {
+                addMessage(err.message);
+                return [];
+            })
+            .finally(() =>  setIsLoading(false));
+
+        addMessage(`Found ${matchedHeroes.length} result(s).`);
+        return matchedHeroes;
+    }
+
+    return { 
+        isLoading: () => isLoading, 
+        addHero, 
+        getHero, 
+        getHeroes, 
+        removeHero, 
+        searchHeroes, 
+        updateHero, 
+    };
 }
 
-async function getHeroes(): Promise<Hero[]> {
+async function listHeroes(): Promise<Hero[]> {
     const data = await fetch("/api/heroes");
     if (data.status !== 200) {
         throw new Error("Could not retrieve heroes.");
@@ -105,4 +156,16 @@ async function deleteHero(id: number): Promise<void> {
     }
 }
 
-export default useHeroes;
+async function findHeroesByTerm(term: string): Promise<Hero[]> {
+    if (term.trim().length === 0) {
+        return [];
+    }
+
+    const data = await fetch(`/api/heroes/search?term=${term.trim()}`);
+    if (data.status !== 200) {
+        throw new Error("Could not search heroes.");
+    }
+    return await data.json();
+}
+
+export default useHeroesService;
