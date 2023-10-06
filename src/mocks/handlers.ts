@@ -23,6 +23,7 @@ export const handlers = [
         if (term === "") {
             return res(
                 ctx.status(200),
+                ctx.delay(3000),
                 ctx.json([])
             );
         }
@@ -31,6 +32,7 @@ export const handlers = [
             .filter((hero) => hero.name.toLowerCase().includes(term));
         return res(
             ctx.status(200),
+            ctx.delay(3000),
             ctx.json(matches)
         );
     }),

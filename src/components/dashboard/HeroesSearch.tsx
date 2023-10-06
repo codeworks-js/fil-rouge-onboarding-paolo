@@ -4,6 +4,7 @@ import { ChangeEventHandler, useState } from "react";
 import useHeroesService from "../../hooks/useHeroes";
 import { getHeroDetailsEndpoint } from "../../router/endpoints";
 import "./heroes-search.css";
+import SearchResultSkeleton from "./SearchResultSkeleton";
 
 function HeroesSearch() {
     const [matchedHeroes, setMatchedHeroes] = useState<Hero[]>([]);
@@ -31,13 +32,15 @@ function HeroesSearch() {
             <button disabled={isLoading()} onClick={onSearchSubmit}>Submit</button>
             <ul className="search-result">
                 {
-                    matchedHeroes.map((hero) => {
-                        return (
-                            <li key={crypto.randomUUID()}>
-                                <Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
-                            </li>
-                        )
-                    })
+                    isLoading() 
+                        ? <SearchResultSkeleton />
+                        : matchedHeroes.map((hero) => {
+                            return (
+                                <li key={crypto.randomUUID()}>
+                                    <Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
+                                </li>
+                            )
+                        })
                 }
             </ul>
         </div>
