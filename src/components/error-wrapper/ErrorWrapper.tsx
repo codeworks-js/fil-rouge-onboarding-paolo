@@ -1,21 +1,21 @@
-import { ReactNode } from "react";
-import "./error-wrapper.css";
+import { ReactNode } from 'react';
+import './error-wrapper.css';
 
 type ErrorWrapperProps = {
-    error: string | null,
-    children: ReactNode
-}
+	error: string | null;
+	children: ReactNode;
+};
 
 function ErrorWrapper({ error, children }: ErrorWrapperProps) {
-    if (error) {
-        return (
-            <div className="error-wrapper">
-                <p>{error}</p>
-            </div>
-        );
-    }
+	if (error) {
+		return (
+			<div className="error-wrapper">
+				<p>{error}</p>
+			</div>
+		);
+	}
 
-    return <>{children}</>
+	return <>{children}</>;
 }
 
 export default ErrorWrapper;

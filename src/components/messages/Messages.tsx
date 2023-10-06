@@ -1,26 +1,24 @@
-import { useContext } from "react";
-import "./messages.css";
-import { MessagesContext } from "../../contexts/MessagesContext";
+import { useContext } from 'react';
+import './messages.css';
+import { MessagesContext } from '../../contexts/MessagesContext';
 
 function Messages() {
-    const {messages, clear, isEmpty} = useContext(MessagesContext);
+	const { messages, clear, isEmpty } = useContext(MessagesContext);
 
-    if (isEmpty()) {
-        return <></>;
-    }
+	if (isEmpty()) {
+		return <></>;
+	}
 
-    return (
-        <>
-            <button 
-                type="button" 
-                className="clear"
-                onClick={(_) => clear()}>Clear messages
-            </button>
-            {
-                messages.map((message) => <div key={crypto.randomUUID()}> {message} </div>)
-            }
-        </>
-    );
+	return (
+		<>
+			<button type="button" className="clear" onClick={(_) => clear()}>
+				Clear messages
+			</button>
+			{messages.map((message) => (
+				<div key={crypto.randomUUID()}> {message} </div>
+			))}
+		</>
+	);
 }
 
 export default Messages;
