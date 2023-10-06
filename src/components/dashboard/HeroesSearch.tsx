@@ -1,33 +1,34 @@
 import { Link } from "react-router-dom";
 import { Hero } from "../../types/Hero";
-import React, { useEffect, useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import useHeroesService from "../../hooks/useHeroes";
-import "./heroes-search.css";
 import { getHeroDetailsEndpoint } from "../../router/endpoints";
+import "./heroes-search.css";
 
 function HeroesSearch() {
     const [matchedHeroes, setMatchedHeroes] = useState<Hero[]>([]);
-    const { searchHeroes } = useHeroesService();
+    const { isLoading, searchHeroes } = useHeroesService();
     const [term, setTerm] = useState<string>("");
 
-    const onSearchInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const onSearchInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const newTerm = event.target.value;
         setTerm(newTerm);
     }
 
-    useEffect(() => {
-        const matchHeroes = async (term: string) => {
-            const heroes = await searchHeroes(term);
-            setMatchedHeroes(heroes);
+    const onSearchSubmit = async(): Promise<void> => {
+        if (term === "") {
+            return;
         }
-        matchHeroes(term);
-    }, [term]);
+
+        const heroes = await searchHeroes(term);
+        setMatchedHeroes(heroes);
+    }
 
     return (
         <div id="search-component">
             <label htmlFor="search-box">Hero search</label>
             <input id="search-box" onChange={onSearchInputChange}/>
-            <button disabled>Submit</button>
+            <button disabled={isLoading()} onClick={onSearchSubmit}>Submit</button>
             <ul className="search-result">
                 {
                     matchedHeroes.map((hero) => {
