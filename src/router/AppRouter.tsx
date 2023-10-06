@@ -3,22 +3,23 @@ import Dashboard from "../components/dashboard/Dashboard";
 import HeroDetail from "../components/heroes/HeroDetail";
 import Heroes from "../components/heroes/Heroes";
 import Root from "../components/root/Root";
+import { ENDPOINTS } from "./endpoints";
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: ENDPOINTS.INDEX,
         element: <Root/>,
         children: [
             {
-                path: "/dashboard",
+                path: ENDPOINTS.DASHBOARD,
                 element: <Dashboard/>
             },
             {
-                path: "/detail/:id",
+                path: ENDPOINTS.HERO_DETAILS,
                 element: <HeroDetail/>
             },
             {
-                path: "/heroes",
+                path: ENDPOINTS.HEROES,
                 element: <Heroes/>
             },
             {

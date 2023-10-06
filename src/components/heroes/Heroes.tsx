@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./heroes.css";
 import { useEffect, useState } from "react";
 import { Hero } from "../../types/Hero";
+import { getHeroDetailsEndpoint } from "../../router/endpoints";
 
 
 function Heroes() {
@@ -58,7 +59,7 @@ function Heroes() {
                     heroes.map((hero) => {
                         return (
                             <li key={hero.id}>
-                                <Link to={`/detail/${hero.id}`}>
+                                <Link to={getHeroDetailsEndpoint(hero.id)}>
                                     <span className="badge">{hero.id}</span> 
                                     <span className="name">{hero.name}</span>
                                 </Link>

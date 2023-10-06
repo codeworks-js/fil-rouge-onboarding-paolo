@@ -3,6 +3,7 @@ import { Hero } from "../../types/Hero";
 import React, { useEffect, useState } from "react";
 import useHeroesService from "../../hooks/useHeroes";
 import "./heroes-search.css";
+import { getHeroDetailsEndpoint } from "../../router/endpoints";
 
 function HeroesSearch() {
     const [matchedHeroes, setMatchedHeroes] = useState<Hero[]>([]);
@@ -32,7 +33,7 @@ function HeroesSearch() {
                     matchedHeroes.map((hero) => {
                         return (
                             <li key={crypto.randomUUID()}>
-                                <Link to={`/detail/${hero.id}`}>{hero.name}</Link>
+                                <Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
                             </li>
                         )
                     })
