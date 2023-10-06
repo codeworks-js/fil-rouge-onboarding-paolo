@@ -28,6 +28,15 @@ export const handlers = [
             );
         }
 
+        // return an error 50% of the time
+        const rand = Math.random();
+        if (rand < 0.5) {
+            return res(
+                ctx.status(500),
+                ctx.delay(3000)
+            );
+        }
+
         const matches = Array.from(HEROES.values())
             .filter((hero) => hero.name.toLowerCase().includes(term));
         return res(
