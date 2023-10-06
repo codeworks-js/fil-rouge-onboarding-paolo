@@ -20,7 +20,7 @@ function useHeroesService(): IHeroesService {
     const getHeroes = async (): Promise<Hero[]> => {
         setIsLoading(true);
         addMessage("HeroService: fetched heroes");
-        console.log(import.meta.env.VITE_API_URL)
+
         return fetcher.get<Hero[]>({ url: new URL("api/heroes", import.meta.env.VITE_API_URL) })
             .catch((_) => {
                 addMessage("Could not retrieve heroes.");
