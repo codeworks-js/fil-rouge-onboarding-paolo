@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import { Hero } from '../types/Hero';
-import { MessagesContext } from '../contexts/MessagesContext';
 import { fetcher } from '../api/fetcher';
+import { MessagesContext } from '../contexts/MessagesContext';
+import { Hero } from '../types/Hero';
 
 interface IHeroesService {
 	isLoading: () => boolean;
@@ -25,8 +25,9 @@ function useHeroesService(): IHeroesService {
 		addMessage('HeroService: fetched heroes');
 
 		return fetcher
-			.get<Hero[]>({ url: new URL('api/heroes', import.meta.env.VITE_API_URL) })
-			.catch((_) => {
+			.get<Hero[]>({ url: new URL('/heroes', import.meta.env.VITE_API_URL) })
+			.catch((err) => {
+				console.error(err);
 				const errorMessage = 'Could not retrieve heroes.';
 				addMessage(errorMessage);
 				setError(errorMessage);
@@ -42,7 +43,7 @@ function useHeroesService(): IHeroesService {
 
 		return fetcher
 			.get<Hero>({
-				url: new URL(`api/heroes/${id}`, import.meta.env.VITE_API_URL),
+				url: new URL(`/heroes/${id}`, import.meta.env.VITE_API_URL),
 			})
 			.catch((_) => {
 				const errorMessage = 'Could not get hero details.';
@@ -62,7 +63,7 @@ function useHeroesService(): IHeroesService {
 
 		await fetcher
 			.put({
-				url: new URL(`api/heroes`, import.meta.env.VITE_API_URL),
+				url: new URL(`/heroes`, import.meta.env.VITE_API_URL),
 				body: hero,
 			})
 			.catch((_) => {
@@ -79,7 +80,7 @@ function useHeroesService(): IHeroesService {
 
 		return fetcher
 			.post<Hero>({
-				url: new URL('api/heroes', import.meta.env.VITE_API_URL),
+				url: new URL('/heroes', import.meta.env.VITE_API_URL),
 				body: { name },
 			})
 			.then((hero) => {
@@ -104,7 +105,7 @@ function useHeroesService(): IHeroesService {
 
 		await fetcher
 			.delete({
-				url: new URL(`api/heroes/${id}`, import.meta.env.VITE_API_URL),
+				url: new URL(`/heroes/${id}`, import.meta.env.VITE_API_URL),
 			})
 			.then(() => addMessage(`Hero w/ id '${id}' removed.`))
 			.catch((_) => {
@@ -122,7 +123,7 @@ function useHeroesService(): IHeroesService {
 		const matchedHeroes = await fetcher
 			.get<Hero[]>({
 				url: new URL(
-					`api/heroes/search?term=${term}`,
+					`/heroes/search?term=${term}`,
 					import.meta.env.VITE_API_URL,
 				),
 			})
