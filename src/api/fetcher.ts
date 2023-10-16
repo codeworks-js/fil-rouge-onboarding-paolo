@@ -27,6 +27,7 @@ async function innerHttpCall<T>(
 ): Promise<T> {
 	const response = await fetch(params.url, {
 		method,
+		headers: params.headers,
 		body: params.body ? JSON.stringify(params.body) : undefined,
 	});
 	if (!response.ok) {
@@ -35,5 +36,5 @@ async function innerHttpCall<T>(
 		);
 	}
 
-	return response.json();
+	return response.json().catch(() => ({}));
 }

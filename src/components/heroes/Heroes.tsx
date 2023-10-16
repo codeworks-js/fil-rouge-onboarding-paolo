@@ -1,9 +1,9 @@
-import useHeroesService from '../../hooks/useHeroes';
-import { Link } from 'react-router-dom';
-import './heroes.css';
 import { useEffect, useState } from 'react';
-import { Hero } from '../../types/Hero';
+import { Link } from 'react-router-dom';
+import useHeroesService from '../../hooks/useHeroes';
 import { getHeroDetailsEndpoint } from '../../router/endpoints';
+import { Hero } from '../../types/Hero';
+import './heroes.css';
 
 function Heroes() {
 	const { getHeroes, addHero, removeHero } = useHeroesService();
@@ -20,8 +20,8 @@ function Heroes() {
 		setNewHeroName(newName);
 	};
 
-	const submitNewHero = async (name: string): Promise<void> => {
-		const newHero = await addHero(name);
+	const submitNewHero = async (): Promise<void> => {
+		const newHero = await addHero(newHeroName);
 		if (newHero.id === -1) {
 			return;
 		}
@@ -47,11 +47,7 @@ function Heroes() {
 			<div>
 				<label htmlFor="new-hero">Hero name: </label>
 				<input id="new-hero" onChange={updateNewHeroName} />
-				<button
-					type="button"
-					className="add-button"
-					onClick={(_) => submitNewHero(newHeroName)}
-				>
+				<button type="button" className="add-button" onClick={submitNewHero}>
 					Add hero
 				</button>
 			</div>

@@ -64,6 +64,7 @@ function useHeroesService(): IHeroesService {
 		await fetcher
 			.put({
 				url: new URL(`/heroes`, import.meta.env.VITE_API_URL),
+				headers: { 'Content-Type': 'application/json' },
 				body: hero,
 			})
 			.catch((_) => {
@@ -81,6 +82,7 @@ function useHeroesService(): IHeroesService {
 		return fetcher
 			.post<Hero>({
 				url: new URL('/heroes', import.meta.env.VITE_API_URL),
+				headers: { 'Content-Type': 'application/json' },
 				body: { name },
 			})
 			.then((hero) => {
