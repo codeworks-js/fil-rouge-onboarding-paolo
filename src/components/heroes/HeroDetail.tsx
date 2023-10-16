@@ -1,7 +1,7 @@
-import { Hero } from '../../types/Hero';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import useHeroesService from '../../hooks/useHeroes';
+import { Hero } from '../../types/Hero';
 import './heroes-detail.css';
 
 function HeroDetail() {
@@ -64,10 +64,10 @@ function HeroDetail() {
 					onChange={updateHeroName}
 				/>
 			</div>
-			<button type="button" onClick={(_) => goBack()}>
+			<button type="button" onClick={goBack}>
 				go back
 			</button>
-			<button type="button" onClick={(_) => saveHero()}>
+			<button type="button" onClick={saveHero}>
 				Save
 			</button>
 		</>

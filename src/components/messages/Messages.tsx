@@ -10,7 +10,7 @@ function Messages() {
 
 	return (
 		<>
-			<button type="button" className="clear" onClick={(_) => clear()}>
+			<button type="button" className="clear" onClick={clear}>
 				Clear messages
 			</button>
 			{messages.map((message) => (

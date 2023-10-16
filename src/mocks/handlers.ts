@@ -38,7 +38,10 @@ export const handlers = [
 		const hero = HEROES.get(heroId);
 
 		if (hero === undefined) {
-			return res(ctx.status(404));
+			return res(
+				ctx.status(404),
+				ctx.json({ message: `Hero n°${heroId} not found.` }),
+			);
 		}
 		return res(ctx.json(hero));
 	}),
