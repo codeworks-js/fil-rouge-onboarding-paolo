@@ -1,9 +1,9 @@
-import useHeroesService from '../../hooks/useHeroes';
-import { Link } from 'react-router-dom';
-import './dashboard.css';
-import HeroesSearch from './HeroesSearch';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import useHeroesService from '../../hooks/useHeroes';
 import { Hero } from '../../types/Hero';
+import HeroesSearch from './HeroesSearch';
+import './dashboard.css';
 
 function Dashboard() {
 	const { getHeroes } = useHeroesService();

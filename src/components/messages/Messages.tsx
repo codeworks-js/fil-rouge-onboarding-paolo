@@ -1,9 +1,8 @@
-import { useContext } from 'react';
+import { useMessagesContext } from '../../hooks/useMessageContext';
 import './messages.css';
-import { MessagesContext } from '../../contexts/MessagesContext';
 
 function Messages() {
-	const { messages, clear, isEmpty } = useContext(MessagesContext);
+	const { messages, clear, isEmpty } = useMessagesContext();
 
 	if (isEmpty()) {
 		return <></>;

@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { fetcher } from '../api/fetcher';
-import { MessagesContext } from '../contexts/MessagesContext';
 import { Hero } from '../types/Hero';
+import { useMessagesContext } from './useMessageContext';
 
 interface IHeroesService {
 	isLoading: () => boolean;
@@ -17,7 +17,7 @@ interface IHeroesService {
 function useHeroesService(): IHeroesService {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
-	const { add: addMessage } = useContext(MessagesContext);
+	const { add: addMessage } = useMessagesContext();
 
 	const getHeroes = async (): Promise<Hero[]> => {
 		setIsLoading(true);
@@ -26,8 +26,7 @@ function useHeroesService(): IHeroesService {
 
 		return fetcher
 			.get<Hero[]>({ url: new URL('/heroes', import.meta.env.VITE_API_URL) })
-			.catch((err) => {
-				console.error(err);
+			.catch((_) => {
 				const errorMessage = 'Could not retrieve heroes.';
 				addMessage(errorMessage);
 				setError(errorMessage);
@@ -44,6 +43,7 @@ function useHeroesService(): IHeroesService {
 		return fetcher
 			.get<Hero>({
 				url: new URL(`/heroes/${id}`, import.meta.env.VITE_API_URL),
+				headers: { Accept: 'application/json' },
 			})
 			.catch((_) => {
 				const errorMessage = 'Could not get hero details.';
