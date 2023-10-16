@@ -1,9 +1,9 @@
 import { rest } from 'msw';
-import { HEROES } from './heroes-data';
 import { Hero } from '../types/Hero';
+import { HEROES } from './heroes-data';
 
 export const handlers = [
-	rest.post('/api/heroes', async (req, res, ctx) => {
+	rest.post('http://localhost:5174/heroes', async (req, res, ctx) => {
 		const { name } = await req.json();
 
 		const newHero: Hero = {
@@ -15,7 +15,7 @@ export const handlers = [
 		return res(ctx.status(201), ctx.json(newHero));
 	}),
 
-	rest.get('/api/heroes/search', async (req, res, ctx) => {
+	rest.get('http://localhost:5174/heroes/search', async (req, res, ctx) => {
 		const term = req.url.searchParams.get('term') || '';
 		if (term === '') {
 			return res(ctx.status(200), ctx.delay(3000), ctx.json([]));
@@ -33,7 +33,7 @@ export const handlers = [
 		return res(ctx.status(200), ctx.delay(3000), ctx.json(matches));
 	}),
 
-	rest.get('/api/heroes/:id', (req, res, ctx) => {
+	rest.get('http://localhost:5174/heroes/:id', (req, res, ctx) => {
 		const heroId = Number(String(req.params.id));
 		const hero = HEROES.get(heroId);
 
@@ -43,17 +43,17 @@ export const handlers = [
 		return res(ctx.json(hero));
 	}),
 
-	rest.get('/api/heroes', (_, res, ctx) => {
+	rest.get('http://localhost:5174/heroes', (_, res, ctx) => {
 		return res(ctx.json(Array.from(HEROES.values())));
 	}),
 
-	rest.put('/api/heroes', async (req, res, ctx) => {
+	rest.put('http://localhost:5174/heroes', async (req, res, ctx) => {
 		const hero = await req.json<Hero>();
 		HEROES.set(hero.id, hero);
 		return res(ctx.status(200));
 	}),
 
-	rest.delete('/api/heroes/:id', (req, res, ctx) => {
+	rest.delete('http://localhost:5174/heroes/:id', (req, res, ctx) => {
 		const heroId = Number(String(req.params.id));
 		HEROES.delete(heroId);
 		return res(ctx.status(204));
