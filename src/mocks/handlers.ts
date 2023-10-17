@@ -12,7 +12,7 @@ export const handlers = [
 		};
 		HEROES.set(newHero.id, newHero);
 
-		return res(ctx.status(201), ctx.json(newHero));
+		return res(ctx.status(201), ctx.delay(2000), ctx.json(newHero));
 	}),
 
 	rest.get('http://localhost:5174/heroes/search', async (req, res, ctx) => {
@@ -40,26 +40,28 @@ export const handlers = [
 		if (hero === undefined) {
 			return res(
 				ctx.status(404),
+				ctx.delay(2000),
 				ctx.json({ message: `Hero n°${heroId} not found.` }),
 			);
 		}
-		return res(ctx.json(hero));
+
+		return res(ctx.delay(2000), ctx.json(hero));
 	}),
 
 	rest.get('http://localhost:5174/heroes', (_, res, ctx) => {
-		return res(ctx.json(Array.from(HEROES.values())));
+		return res(ctx.delay(2000), ctx.json(Array.from(HEROES.values())));
 	}),
 
 	rest.put('http://localhost:5174/heroes', async (req, res, ctx) => {
 		const hero = await req.json<Hero>();
 		HEROES.set(hero.id, hero);
-		return res(ctx.status(200));
+		return res(ctx.status(200), ctx.delay(2000));
 	}),
 
 	rest.delete('http://localhost:5174/heroes/:id', (req, res, ctx) => {
 		const heroId = Number(String(req.params.id));
 		HEROES.delete(heroId);
-		return res(ctx.status(204));
+		return res(ctx.status(204), ctx.delay(2000));
 	}),
 ];
 

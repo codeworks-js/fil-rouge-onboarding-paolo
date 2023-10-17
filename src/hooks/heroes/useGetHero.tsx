@@ -29,7 +29,6 @@ export function useGetHero(id: number): IGetHero {
 				});
 				setHero(hero);
 			} catch (err) {
-				console.log('SETTING AN ERROR');
 				const errorMessage = 'Could not get hero details.';
 				addMessage(errorMessage);
 				setError(errorMessage);

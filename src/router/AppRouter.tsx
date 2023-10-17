@@ -5,7 +5,7 @@ import {
 	createRoutesFromElements,
 } from 'react-router-dom';
 import Dashboard from '../components/dashboard/Dashboard';
-import HeroDetail from '../components/heroes/HeroDetail';
+import HeroDetail from '../components/hero-detail/HeroDetail';
 import Heroes from '../components/heroes/Heroes';
 import Root from '../components/root/Root';
 import { ENDPOINTS } from './endpoints';

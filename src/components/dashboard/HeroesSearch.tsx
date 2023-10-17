@@ -12,7 +12,6 @@ function HeroesSearch() {
 	const onSearchInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const newTerm = event.target.value;
 		searchTerm(newTerm);
-		console.log('new term', newTerm);
 	};
 
 	const onSearchSubmit = async (): Promise<void> => {
