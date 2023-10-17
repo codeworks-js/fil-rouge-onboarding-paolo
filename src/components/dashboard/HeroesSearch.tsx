@@ -1,29 +1,22 @@
+import { ChangeEventHandler } from 'react';
 import { Link } from 'react-router-dom';
-import { Hero } from '../../types/Hero';
-import { ChangeEventHandler, useState } from 'react';
-import useHeroesService from '../../hooks/useHeroes';
+import { useSearchHeroes } from '../../hooks/heroes/useSearchHeroes';
 import { getHeroDetailsEndpoint } from '../../router/endpoints';
-import './heroes-search.css';
-import SearchResultSkeleton from './SearchResultSkeleton';
 import ErrorWrapper from '../error-wrapper/ErrorWrapper';
+import SearchResultSkeleton from './SearchResultSkeleton';
+import './heroes-search.css';
 
 function HeroesSearch() {
-	const [matchedHeroes, setMatchedHeroes] = useState<Hero[]>([]);
-	const { error, isLoading, searchHeroes } = useHeroesService();
-	const [term, setTerm] = useState<string>('');
+	const { heroes, refresh, searchTerm, isLoading, error } = useSearchHeroes('');
 
 	const onSearchInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const newTerm = event.target.value;
-		setTerm(newTerm);
+		searchTerm(newTerm);
+		console.log('new term', newTerm);
 	};
 
 	const onSearchSubmit = async (): Promise<void> => {
-		if (term === '') {
-			return;
-		}
-
-		const heroes = await searchHeroes(term);
-		setMatchedHeroes(heroes);
+		refresh();
 	};
 
 	return (
@@ -38,7 +31,7 @@ function HeroesSearch() {
 					{isLoading() ? (
 						<SearchResultSkeleton />
 					) : (
-						matchedHeroes.map((hero) => {
+						heroes().map((hero) => {
 							return (
 								<li key={crypto.randomUUID()}>
 									<Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
