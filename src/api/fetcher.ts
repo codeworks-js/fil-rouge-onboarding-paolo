@@ -25,7 +25,7 @@ async function innerHttpCall<T>(
 	params: FetcherParams,
 	errorMessage?: string,
 ): Promise<T> {
-	const response = await fetch(params.url, {
+	const response = await fetch(params.url.toString(), {
 		method,
 		headers: params.headers,
 		body: params.body ? JSON.stringify(params.body) : undefined,

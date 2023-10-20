@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchHeroes } from '../../hooks/heroes/useSearchHeroes';
 import { getHeroDetailsEndpoint } from '../../router/endpoints';
@@ -7,15 +7,16 @@ import SearchResultSkeleton from './SearchResultSkeleton';
 import './heroes-search.css';
 
 function HeroesSearch() {
-	const { heroes, refresh, searchTerm, isLoading, error } = useSearchHeroes('');
-
+	const [term, setTerm] = useState<string>('');
+	const { heroes, refresh, /*searchTerm,*/ isLoading, error } =
+		useSearchHeroes();
 	const onSearchInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const newTerm = event.target.value;
-		searchTerm(newTerm);
+		setTerm(newTerm);
 	};
 
 	const onSearchSubmit = async (): Promise<void> => {
-		refresh();
+		refresh(term);
 	};
 
 	return (
