@@ -10,10 +10,11 @@ interface ICreateHero {
 }
 
 export function useCreateHero(): ICreateHero {
-	const { add: addMessage } = useMessagesContext();
+	const messagesStore = useMessagesContext();
 	const queryClient = useQueryClient();
 	const { isPending, error, mutate } = useMutation<Hero, Error, string>({
-		mutationFn: async (name) => createHero(name, addMessage),
+		mutationFn: async (name) =>
+			createHero(name, messagesStore.add.bind(messagesStore)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['heroes'] });
 		},

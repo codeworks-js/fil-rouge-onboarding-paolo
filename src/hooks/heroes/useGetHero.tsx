@@ -10,7 +10,7 @@ interface IGetHero {
 }
 
 export function useGetHero(id: number): IGetHero {
-	const { add: addMessage } = useMessagesContext();
+	const messagesStore = useMessagesContext();
 	const { data, isLoading, error } = useQuery<
 		Hero,
 		Error,
@@ -18,7 +18,8 @@ export function useGetHero(id: number): IGetHero {
 		[string, number]
 	>({
 		queryKey: ['hero', id],
-		queryFn: async ({ signal }) => getHero(id, signal, addMessage),
+		queryFn: async ({ signal }) =>
+			getHero(id, signal, messagesStore.add.bind(messagesStore)),
 	});
 
 	return {

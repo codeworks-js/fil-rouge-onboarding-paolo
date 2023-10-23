@@ -10,10 +10,11 @@ interface IListHeroes {
 }
 
 export function useListHeroes(): IListHeroes {
-	const { add: addMessage } = useMessagesContext();
+	const messagesStore = useMessagesContext();
 	const { data, isLoading, error } = useQuery<Hero[], Error, Hero[], string[]>({
 		queryKey: ['heroes'],
-		queryFn: async ({ signal }) => getHeroes(signal, addMessage),
+		queryFn: async ({ signal }) =>
+			getHeroes(signal, messagesStore.add.bind(messagesStore)),
 	});
 
 	return {

@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useListHeroes } from '../../hooks/heroes/useListHeroes';
 import { Hero } from '../../types/Hero';
@@ -5,7 +6,7 @@ import ErrorWrapper from '../error-wrapper/ErrorWrapper';
 import HeroesSearch from './HeroesSearch';
 import './dashboard.css';
 
-function Dashboard() {
+const Dashboard = observer(() => {
 	const { heroes, isLoading, error } = useListHeroes();
 
 	return (
@@ -23,7 +24,7 @@ function Dashboard() {
 			<HeroesSearch />
 		</>
 	);
-}
+});
 
 function TopHeroItems(props: { topHeroes: Hero[] }) {
 	return (

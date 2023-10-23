@@ -10,9 +10,10 @@ interface IRemoveHero {
 
 export function useRemoveHero(): IRemoveHero {
 	const queryClient = useQueryClient();
-	const { add: addMessage } = useMessagesContext();
+	const messageStore = useMessagesContext();
 	const { error, isPending, mutate } = useMutation({
-		mutationFn: async (id: number) => removeHero(id, addMessage),
+		mutationFn: async (id: number) =>
+			removeHero(id, messageStore.add.bind(messageStore)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['heroes'] });
 		},

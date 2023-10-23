@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCreateHero } from '../../hooks/heroes/useCreateHero';
@@ -7,7 +8,7 @@ import { getHeroDetailsEndpoint } from '../../router/endpoints';
 import ErrorWrapper from '../error-wrapper/ErrorWrapper';
 import './heroes.css';
 
-function Heroes() {
+const Heroes = observer(() => {
 	const [newHeroName, setNewHeroName] = useState<string>('');
 	const {
 		heroes,
@@ -71,6 +72,6 @@ function Heroes() {
 			</ErrorWrapper>
 		</>
 	);
-}
+});
 
 export default Heroes;

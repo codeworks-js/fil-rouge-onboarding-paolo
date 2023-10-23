@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import { ChangeEventHandler, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateHero } from '../../hooks/heroes/useUpdateHero';
@@ -7,7 +8,7 @@ type HeroFormProps = {
 	initiaHero: Hero;
 };
 
-function HeroForm({ initiaHero }: HeroFormProps) {
+const HeroForm = observer(({ initiaHero }: HeroFormProps) => {
 	const [currentName, setCurrentName] = useState<string>(initiaHero.name);
 	const navigate = useNavigate();
 	const { isLoading, updateHero } = useUpdateHero();
@@ -51,6 +52,6 @@ function HeroForm({ initiaHero }: HeroFormProps) {
 			</button>
 		</>
 	);
-}
+});
 
 export default HeroForm;

@@ -11,9 +11,10 @@ interface IUpdateHero {
 
 export function useUpdateHero(): IUpdateHero {
 	const queryClient = useQueryClient();
-	const { add: addMessage } = useMessagesContext();
+	const messagesStore = useMessagesContext();
 	const { isPending, error, mutate } = useMutation({
-		mutationFn: async (hero: Hero) => updateHero(hero, addMessage),
+		mutationFn: async (hero: Hero) =>
+			updateHero(hero, messagesStore.add.bind(messagesStore)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ['heroes', 'hero'],

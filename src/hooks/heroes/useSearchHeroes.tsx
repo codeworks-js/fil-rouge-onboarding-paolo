@@ -11,7 +11,7 @@ interface ISearchHeroes {
 }
 
 export function useSearchHeroes(pattern: string): ISearchHeroes {
-	const { add: addMessage } = useMessagesContext();
+	const messagesStore = useMessagesContext();
 	const { data, isRefetching, isLoading, error, refetch } = useQuery<
 		Hero[],
 		Error,
@@ -19,7 +19,8 @@ export function useSearchHeroes(pattern: string): ISearchHeroes {
 		string[]
 	>({
 		queryKey: ['searchHeroes', pattern],
-		queryFn: async ({ signal }) => searchHeroes(pattern, signal, addMessage),
+		queryFn: async ({ signal }) =>
+			searchHeroes(pattern, signal, messagesStore.add.bind(messagesStore)),
 		enabled: false,
 		initialData: [],
 	});

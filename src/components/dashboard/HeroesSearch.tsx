@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import { ChangeEventHandler, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchHeroes } from '../../hooks/heroes/useSearchHeroes';
@@ -6,7 +7,7 @@ import ErrorWrapper from '../error-wrapper/ErrorWrapper';
 import SearchResultSkeleton from './SearchResultSkeleton';
 import './heroes-search.css';
 
-function HeroesSearch() {
+const HeroesSearch = observer(() => {
 	const [pattern, setPattern] = useState<string>('');
 	const { heroes, search, isLoading, error } = useSearchHeroes(pattern);
 
@@ -41,6 +42,6 @@ function HeroesSearch() {
 			</ErrorWrapper>
 		</div>
 	);
-}
+});
 
 export default HeroesSearch;
