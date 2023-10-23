@@ -43,38 +43,4 @@ function HeroesSearch() {
 	);
 }
 
-// function DataDisplay(props: {
-// 	isLoading: boolean;
-// 	heroes: Hero[];
-// 	error: Error | null;
-// }) {
-// 	if (props.error !== null) {
-// 		return (
-// 			<div className="error-wrapper">
-// 				<p>{props.error.message}</p>
-// 			</div>
-// 		);
-// 	}
-
-// 	if (props.isLoading) {
-// 		return (
-// 			<ul className="search-result">
-// 				<SearchResultSkeleton />
-// 			</ul>
-// 		);
-// 	}
-
-// 	return (
-// 		<ul className="search-result">
-// 			{props.heroes.map((hero) => {
-// 				return (
-// 					<li key={crypto.randomUUID()}>
-// 						<Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
-// 					</li>
-// 				);
-// 			})}
-// 		</ul>
-// 	);
-// }
-
 export default HeroesSearch;

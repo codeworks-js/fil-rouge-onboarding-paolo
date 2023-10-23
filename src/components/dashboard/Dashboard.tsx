@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-// import useHeroesService from '../../hooks/useHeroes';
 import { useListHeroes } from '../../hooks/heroes/useListHeroes';
 import { Hero } from '../../types/Hero';
 import ErrorWrapper from '../error-wrapper/ErrorWrapper';
