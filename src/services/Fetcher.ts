@@ -2,6 +2,7 @@ export type FetcherParams = {
 	url: URL;
 	headers?: Record<string, string>;
 	body?: Record<string, unknown>;
+	signal?: AbortSignal;
 };
 
 export interface Fetcher {

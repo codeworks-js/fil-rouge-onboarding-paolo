@@ -1,86 +1,58 @@
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '../../api/fetcher';
 import { Hero } from '../../types/Hero';
-import { useError } from '../useError';
-import { useLoader } from '../useLoader';
 import { useMessagesContext } from '../useMessageContext';
 
 interface ISearchHeroes {
-	isLoading: () => boolean;
-	error: () => string | null;
-	heroes: () => Hero[];
-	// searchTerm: (term: string) => void;
-	refresh: (term: string) => Promise<void>;
+	isLoading: boolean;
+	error: Error | null;
+	heroes: Hero[];
+	search: () => void;
 }
 
-export function useSearchHeroes(): ISearchHeroes {
-	// const [term, setTerm] = useState<string>(initialTerm);
-	const [heroes, setHeroes] = useState<Hero[]>([]);
-	const { isLoading, startLoading, stopLoading } = useLoader();
-	const { error, setError, clear } = useError();
+export function useSearchHeroes(pattern: string): ISearchHeroes {
 	const { add: addMessage } = useMessagesContext();
-
-	const refresh = async (term: string) => {
-		if (term === '') {
-			return;
-		}
-		clear();
-
-		try {
-			startLoading();
-			const matchedHeroes = await fetcher.get<Hero[]>({
-				url: new URL(
-					`/heroes/search?term=${term}`,
-					import.meta.env.VITE_API_URL,
-				),
-			});
-			setHeroes(matchedHeroes);
-			addMessage(`Found ${matchedHeroes.length} result(s).`);
-		} catch (err) {
-			console.error(err);
-			const errorMessage = 'Could not search heroes.';
-			addMessage(errorMessage);
-			setError(errorMessage);
-		} finally {
-			stopLoading();
-		}
-	};
-
-	// const refresh = useCallback(() => {
-	// 	if (term === '') {
-	// 		return;
-	// 	}
-	// 	clear();
-
-	// 	const matchHeroes = async () => {
-	// 		try {
-	// 			startLoading();
-	// 			const matchedHeroes = await fetcher.get<Hero[]>({
-	// 				url: new URL(
-	// 					`/heroes/search?term=${term}`,
-	// 					import.meta.env.VITE_API_URL,
-	// 				),
-	// 			});
-	// 			setHeroes(matchedHeroes);
-	// 			addMessage(`Found ${matchedHeroes.length} result(s).`);
-	// 		} catch (err) {
-	// 			console.error(err);
-	// 			const errorMessage = 'Could not search heroes.';
-	// 			addMessage(errorMessage);
-	// 			setError(errorMessage);
-	// 		} finally {
-	// 			stopLoading();
-	// 		}
-	// 	};
-
-	// 	matchHeroes();
-	// }, [term]);
+	const { data, isRefetching, isLoading, error, refetch } = useQuery<
+		Hero[],
+		Error,
+		Hero[],
+		string[]
+	>({
+		queryKey: ['searchHeroes', pattern],
+		queryFn: async ({ signal }) => searchHeroes(pattern, signal, addMessage),
+		enabled: false,
+		initialData: [],
+	});
 
 	return {
-		isLoading,
+		isLoading: isLoading || isRefetching,
 		error,
-		heroes: () => heroes,
-		//searchTerm: setTerm,
-		refresh,
+		heroes: data!,
+		search: refetch,
 	};
+}
+
+async function searchHeroes(
+	pattern: string,
+	signal: AbortSignal,
+	notifier: (message: string) => void,
+): Promise<Hero[]> {
+	if (pattern === '') {
+		return [];
+	}
+
+	try {
+		notifier(`Searched heroes with pattern ${pattern}.`);
+		const matchedHeroes = await fetcher.get<Hero[]>({
+			url: new URL(
+				`/heroes/search?term=${pattern}`,
+				import.meta.env.VITE_API_URL,
+			),
+			signal,
+		});
+		return matchedHeroes;
+	} catch (err) {
+		console.error(err);
+		throw new Error('Could not search heroes.');
+	}
 }

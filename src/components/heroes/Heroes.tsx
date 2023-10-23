@@ -13,15 +13,9 @@ function Heroes() {
 		heroes,
 		error: listError,
 		isLoading: isListLoading,
-		append,
-		removeById,
 	} = useListHeroes();
-	const { isLoading: isCreating, createHero } = useCreateHero({
-		onCreated: append,
-	});
-	const { isLoading: isRemoving, removeHero } = useRemoveHero({
-		onRemoved: removeById,
-	});
+	const { isLoading: isCreating, createHero } = useCreateHero();
+	const { isLoading: isRemoving, removeHero } = useRemoveHero();
 
 	const updateNewHeroName: React.ChangeEventHandler<HTMLInputElement> = (
 		event,

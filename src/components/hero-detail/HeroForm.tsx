@@ -9,17 +9,17 @@ type HeroFormProps = {
 
 function HeroForm({ initiaHero }: HeroFormProps) {
 	const [currentName, setCurrentName] = useState<string>(initiaHero.name);
-	const { updateHero, isLoading } = useUpdateHero();
 	const navigate = useNavigate();
-
-	const goBack = () => navigate(-1);
+	const { isLoading, updateHero } = useUpdateHero();
 
 	const updateHeroName: ChangeEventHandler<HTMLInputElement> = (event) => {
 		setCurrentName(event.target.value);
 	};
 
+	const goBack = () => navigate(-1);
+
 	const save = async () => {
-		await updateHero({
+		updateHero({
 			id: initiaHero.id,
 			name: currentName,
 		});

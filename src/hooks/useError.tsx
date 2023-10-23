@@ -3,7 +3,7 @@ import { useState } from 'react';
 interface IErrorService {
 	error: () => string | null;
 	setError: (error: string) => void;
-	clear: () => void;
+	clearError: () => void;
 }
 
 export function useError(): IErrorService {
@@ -12,6 +12,6 @@ export function useError(): IErrorService {
 	return {
 		error: () => error,
 		setError: (err: string) => setError(err),
-		clear: () => setError(null),
+		clearError: () => setError(null),
 	};
 }

@@ -29,6 +29,7 @@ async function innerHttpCall<T>(
 		method,
 		headers: params.headers,
 		body: params.body ? JSON.stringify(params.body) : undefined,
+		signal: params.signal,
 	});
 	if (!response.ok) {
 		throw new Error(

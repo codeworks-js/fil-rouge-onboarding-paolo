@@ -7,42 +7,74 @@ import SearchResultSkeleton from './SearchResultSkeleton';
 import './heroes-search.css';
 
 function HeroesSearch() {
-	const [term, setTerm] = useState<string>('');
-	const { heroes, refresh, /*searchTerm,*/ isLoading, error } =
-		useSearchHeroes();
+	const [pattern, setPattern] = useState<string>('');
+	const { heroes, search, isLoading, error } = useSearchHeroes(pattern);
+
 	const onSearchInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const newTerm = event.target.value;
-		setTerm(newTerm);
+		setPattern(newTerm);
 	};
 
 	const onSearchSubmit = async (): Promise<void> => {
-		refresh(term);
+		search();
 	};
 
 	return (
 		<div id="search-component">
 			<label htmlFor="search-box">Hero search</label>
 			<input id="search-box" onChange={onSearchInputChange} />
-			<button disabled={isLoading()} onClick={onSearchSubmit}>
+			<button disabled={isLoading} onClick={onSearchSubmit}>
 				Submit
 			</button>
-			<ErrorWrapper error={error()}>
+			<ErrorWrapper error={error?.message || null}>
 				<ul className="search-result">
-					{isLoading() ? (
+					{isLoading ? (
 						<SearchResultSkeleton />
 					) : (
-						heroes().map((hero) => {
-							return (
-								<li key={crypto.randomUUID()}>
-									<Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
-								</li>
-							);
-						})
+						heroes.map((hero) => (
+							<li key={crypto.randomUUID()}>
+								<Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
+							</li>
+						))
 					)}
 				</ul>
 			</ErrorWrapper>
 		</div>
 	);
 }
+
+// function DataDisplay(props: {
+// 	isLoading: boolean;
+// 	heroes: Hero[];
+// 	error: Error | null;
+// }) {
+// 	if (props.error !== null) {
+// 		return (
+// 			<div className="error-wrapper">
+// 				<p>{props.error.message}</p>
+// 			</div>
+// 		);
+// 	}
+
+// 	if (props.isLoading) {
+// 		return (
+// 			<ul className="search-result">
+// 				<SearchResultSkeleton />
+// 			</ul>
+// 		);
+// 	}
+
+// 	return (
+// 		<ul className="search-result">
+// 			{props.heroes.map((hero) => {
+// 				return (
+// 					<li key={crypto.randomUUID()}>
+// 						<Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
+// 					</li>
+// 				);
+// 			})}
+// 		</ul>
+// 	);
+// }
 
 export default HeroesSearch;
