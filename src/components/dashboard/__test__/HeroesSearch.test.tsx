@@ -4,7 +4,7 @@ import { rest } from 'msw';
 import { MemoryRouter } from 'react-router-dom';
 import { server } from '../../../../tests/mock-server';
 import { renderWithContexts } from '../../../../tests/render-with-contexts';
-import HeroesSearch from '../HeroesSearch';
+import HeroesSearch from '../HeroesSearch/HeroesSearch';
 
 describe('Heroes Search component', () => {
 	const url = 'heroes/search';

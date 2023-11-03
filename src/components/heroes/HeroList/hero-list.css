@@ -1,22 +1,18 @@
 .heroes {
-	margin: 0 0 2em 0;
+	margin-bottom: 2em;
 	list-style-type: none;
-	padding: 0;
 	width: 15em;
-}
-
-input {
-	display: block;
-	width: 100%;
-	padding: 0.5rem;
-	margin: 1rem 0;
-	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	row-gap: 1.5em;
 }
 
 .heroes li {
 	display: flex;
-	position: relative;
 	cursor: pointer;
+	height: 1.8em;
+	padding: 0;
+	align-items: center;
 }
 
 .heroes li:hover {
@@ -30,8 +26,6 @@ input {
 	background-color: #eee;
 	left: 0;
 	margin: 0.5em;
-	padding: 0;
-	height: 1.8em;
 	border-radius: 4px;
 	display: flex;
 	align-items: stretch;
@@ -66,29 +60,19 @@ input {
 	align-self: center;
 }
 
-.add-button {
-	padding: 0.5rem 1.5rem;
-	font-size: 1rem;
-	margin-bottom: 2rem;
-}
-
-.add-button:hover {
-	color: white;
-	background-color: #42545c;
-}
-
 button.delete {
-	position: absolute;
-	left: 195px;
-	top: 15px;
 	background-color: white;
 	color: #525252;
 	font-size: 1.1rem;
+	background-image: url('./img/bin.png');
+	background-size: cover;
+	padding: 0;
 	margin: 0;
-	padding: 1px 10px 3px 10px;
+	height: 1.8rem;
+	width: 1.8rem;
+	text-align: center;
 }
 
 button.delete:hover {
-	background-color: #525252;
-	color: white;
+	background-color: white;
 }

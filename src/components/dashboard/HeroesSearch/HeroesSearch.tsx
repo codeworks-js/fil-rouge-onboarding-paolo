@@ -1,13 +1,12 @@
-import { observer } from 'mobx-react-lite';
 import { ChangeEventHandler, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSearchHeroes } from '../../hooks/heroes/useSearchHeroes';
-import { getHeroDetailsEndpoint } from '../../router/endpoints';
-import ErrorWrapper from '../error-wrapper/ErrorWrapper';
+import { useSearchHeroes } from '../../../hooks/heroes/useSearchHeroes';
+import ErrorWrapper from '../../error-wrapper/ErrorWrapper';
+import UnorderedItemList from '../../item-list/UnorderedItemList';
 import SearchResultSkeleton from './SearchResultSkeleton';
+import SearchResultsItem from './SearchResultsItem';
 import './heroes-search.css';
 
-const HeroesSearch = observer(() => {
+const HeroesSearch = () => {
 	const [pattern, setPattern] = useState<string>('');
 	const { heroes, search, isLoading, error } = useSearchHeroes(pattern);
 
@@ -28,20 +27,20 @@ const HeroesSearch = observer(() => {
 				Submit
 			</button>
 			<ErrorWrapper error={error?.message || null}>
-				<ul className="search-result">
-					{isLoading ? (
-						<SearchResultSkeleton />
-					) : (
-						heroes.map((hero) => (
-							<li key={crypto.randomUUID()}>
-								<Link to={getHeroDetailsEndpoint(hero.id)}>{hero.name}</Link>
-							</li>
-						))
-					)}
-				</ul>
+				{isLoading ? (
+					<SearchResultSkeleton />
+				) : (
+					<UnorderedItemList
+						className="search-result"
+						emptyElement={() => <div>No match found.</div>}
+						items={heroes}
+						builder={(hero) => <SearchResultsItem hero={hero} />}
+						keyGenerator={(hero) => hero.id}
+					/>
+				)}
 			</ErrorWrapper>
 		</div>
 	);
-});
+};
 
 export default HeroesSearch;

@@ -44,4 +44,5 @@ button:disabled {
 /* everywhere else */
 * {
 	font-family: Arial, Helvetica, sans-serif;
+	box-sizing: content-box;
 }

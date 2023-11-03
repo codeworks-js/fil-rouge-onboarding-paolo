@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import { fetcher } from '../../api/fetcher';
 import { Hero } from '../../types/Hero';
 import { useMessagesContext } from '../useMessageContext';
@@ -12,22 +13,25 @@ interface ISearchHeroes {
 
 export function useSearchHeroes(pattern: string): ISearchHeroes {
 	const messagesStore = useMessagesContext();
+	const notify = useCallback(
+		(message: string) => messagesStore.add(message),
+		[],
+	);
 	const { data, isRefetching, isLoading, error, refetch } = useQuery<
 		Hero[],
 		Error,
 		Hero[],
 		string[]
 	>({
-		queryKey: ['searchHeroes', pattern],
-		queryFn: async ({ signal }) =>
-			searchHeroes(pattern, signal, messagesStore.add.bind(messagesStore)),
+		queryKey: ['searchHeroes'],
+		queryFn: async ({ signal }) => searchHeroes(pattern, signal, notify),
 		enabled: false,
 		initialData: [],
 	});
 
 	return {
 		isLoading: isLoading || isRefetching,
-		error,
+		error: (!isLoading && error) || null,
 		heroes: data!,
 		search: refetch,
 	};
